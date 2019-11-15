@@ -10,11 +10,12 @@
   },
   "keywords": [
     "Catenis",
-    "off-chain"
+    "off-chain",
+    "library"
   ],
   "author": "Cláudio de Castro",
   "engines": {
-    "node": ">=8.15.1"
+    "node": ">=8.0.0"
   },
   "private": true,
   "dependencies": {
@@ -29,5 +30,6 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
     "nyc": "^14.1.1"
-  }
+  },
+  "repository": "git@bitbucket.org:blockchainofthings/catenis-off-chain-lib.git"
 }
