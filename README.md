@@ -1,4 +1,4 @@
-# Catenis Off-chain Library
+# Catenis Off-Chain Library
 
 A Node.js library used for manipulating Catenis off-chain message data structures.
 
