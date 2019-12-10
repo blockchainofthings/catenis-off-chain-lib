@@ -340,12 +340,12 @@ class MessageEnvelope {
 
 MessageEnvelope.msgType = Object.freeze({
     logMessage: Object.freeze({
-        name: 'logMessage',
+        name: 'log-message',
         description: 'Catenis message used to record data to the blockchain',
         byteId: 0x00
     }),
     sendMessage: Object.freeze({
-        name: 'sendMessage',
+        name: 'send-message',
         description: 'Catenis message used to record data to the blockchain addressing it to a specific virtual device',
         byteId: 0x01
     })
