@@ -1,5 +1,5 @@
-// Catenis off-chain data types
-const offChainDataType = Object.freeze({
+// Catenis off-chain message data types
+const msgDataType = Object.freeze({
     msgEnvelope: Object.freeze({
         name: 'msg-envelope',
         description: 'Off-Chain message envelope'
@@ -11,5 +11,5 @@ const offChainDataType = Object.freeze({
 });
 
 module.exports = {
-    type: offChainDataType
+    msgDataType: msgDataType
 };
