@@ -1,4 +1,3 @@
-const CID = require('cids');
 const bitcoinLib = require('bitcoinjs-lib');
 const varint = require('varint');
 const Util = require('./Util');
@@ -363,7 +362,7 @@ MessageEnvelope.storageProvider = Object.freeze({
         name: "ipfs",
         description: "IPFS - Interplanetary Filesystem",
         version: 2,
-        validator: (ref) => Util.validateCID(ref) !== undefined
+        validator: (ref) => Util.validateCid(ref) !== undefined
     })
 });
 

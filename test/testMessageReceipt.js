@@ -9,7 +9,7 @@ describe('Create new Message Receipt', function () {
     const keyPair1 = bitcoinLib.ECPair.fromWIF('KySHu9Pe4eZmBQ8unFQGR1oNaYpUeXwmYux386mTioD1L72WYtYf');
     const keyPair2 = bitcoinLib.ECPair.fromWIF('L33Ty5rCmDg6Tzvi5D25aL7RCc2AV8ksN2Zq78wpKLpmznoqiSNs');
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
-    const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+    const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
     const sendMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
         msgOpts: 0x03,
@@ -17,16 +17,16 @@ describe('Create new Message Receipt', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const msgEnvCID = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
+    const msgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
         msgOpts: 0x01,
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
 
     it('should throw if no parameter is passed', function () {
@@ -157,7 +157,7 @@ describe('Create new Message Receipt', function () {
         }).to.throw(Error, 'invalid `timestamp` property');
     });
 
-    it('should throw if an object missing property `msgEnvCID` is passed', function () {
+    it('should throw if an object missing property `msgEnvCid` is passed', function () {
         expect(() => {
             new ctnOffChainLib.MessageReceipt({
                 msgInfo: {
@@ -166,10 +166,10 @@ describe('Create new Message Receipt', function () {
                 },
                 timestamp: new Date('2019-11-09').getTime()
             });
-        }).to.throw(Error, 'missing or invalid `msgEnvCID` property');
+        }).to.throw(Error, 'missing or invalid `msgEnvCid` property');
     });
 
-    it('should throw if an object with an invalid `msgEnvCID` property is passed', function () {
+    it('should throw if an object with an invalid `msgEnvCid` property is passed', function () {
         expect(() => {
             new ctnOffChainLib.MessageReceipt({
                 msgInfo: {
@@ -177,26 +177,26 @@ describe('Create new Message Receipt', function () {
                     receiverPubKeyHash: Buffer.alloc(20, 0xff)
                 },
                 timestamp: new Date('2019-11-09').getTime(),
-                msgEnvCID: Buffer.from('bla')
+                msgEnvCid: Buffer.from('bla')
             });
-        }).to.throw(Error, 'missing or invalid `msgEnvCID` property');
+        }).to.throw(Error, 'missing or invalid `msgEnvCid` property');
     });
 
-    it('should throw if an object with an inconsistent value in property `msgEnvCID` is passed', function () {
+    it('should throw if an object with an inconsistent value in property `msgEnvCid` is passed', function () {
         expect(() => {
             new ctnOffChainLib.MessageReceipt({
                 msgInfo: sendMsgEnv,
                 timestamp: new Date('2019-11-09').getTime(),
-                msgEnvCID: msgCID
+                msgEnvCid: msgCid
             });
-        }).to.throw(Error, 'inconsistent `msgEnvCID` property: it does not match message envelope');
+        }).to.throw(Error, 'inconsistent `msgEnvCid` property: it does not match message envelope');
     });
 
     it('should return a MessageReceipt object', function () {
         const msgRcpt = new ctnOffChainLib.MessageReceipt({
             msgInfo: sendMsgEnv,
             timestamp: new Date('2019-11-09').getTime(),
-            msgEnvCID: msgEnvCID
+            msgEnvCid: msgEnvCid
         });
 
         expect(msgRcpt).to.be.an.instanceof(ctnOffChainLib.MessageReceipt);
@@ -205,7 +205,7 @@ describe('Create new Message Receipt', function () {
     it('should return a MessageReceipt object even if no timestamp is passed', function () {
         const msgRcpt = new ctnOffChainLib.MessageReceipt({
             msgInfo: sendMsgEnv,
-            msgEnvCID: msgEnvCID
+            msgEnvCid: msgEnvCid
         });
 
         expect(msgRcpt).to.be.an.instanceof(ctnOffChainLib.MessageReceipt);
@@ -216,7 +216,7 @@ describe('Message Receipt instance', function () {
     const keyPair1 = bitcoinLib.ECPair.fromWIF('KySHu9Pe4eZmBQ8unFQGR1oNaYpUeXwmYux386mTioD1L72WYtYf');
     const keyPair2 = bitcoinLib.ECPair.fromWIF('L33Ty5rCmDg6Tzvi5D25aL7RCc2AV8ksN2Zq78wpKLpmznoqiSNs');
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
-    const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+    const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
     const sendMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
         msgOpts: 0x03,
@@ -224,9 +224,9 @@ describe('Message Receipt instance', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const msgEnvCID = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
+    const msgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
 
     describe('not passing message envelope', function () {
         const msgRcpt = new ctnOffChainLib.MessageReceipt({
@@ -235,7 +235,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: sendMsgEnv.receiverPubKeyHash
             },
             timestamp: new Date('2019-11-09').getTime(),
-            msgEnvCID: msgEnvCID
+            msgEnvCid: msgEnvCid
         });
         const msgRcptHex = '55520144e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc0012205974ca7b881b524eaffab90cdc533a43e2c1e3cc9ffbbb8c87f722f03c57744c';
 
@@ -262,7 +262,7 @@ describe('Message Receipt instance', function () {
                 senderPubKeyHash: hashPubKey(keyPair1),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID.buffer
+                msgRef: msgCid.buffer
             });
             const noReadConfSendMsgEnv = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -271,7 +271,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID.buffer
+                msgRef: msgCid.buffer
             });
             const keyPair3 = bitcoinLib.ECPair.makeRandom();
             const keyPair4 = bitcoinLib.ECPair.makeRandom();
@@ -282,7 +282,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID.buffer
+                msgRef: msgCid.buffer
             });
             const sendMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -291,9 +291,9 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair4),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID.buffer
+                msgRef: msgCid.buffer
             });
-            const msg2CID = new CID(0, 'dag-pb', multihashing(Buffer.from('Another test message'),'sha2-256'));
+            const msg2Cid = new CID(0, 'dag-pb', multihashing(Buffer.from('Another test message'),'sha2-256'));
             const sendMsgEnv4 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
                 msgOpts: 0x03,
@@ -301,7 +301,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msg2CID.buffer
+                msgRef: msg2Cid.buffer
             });
 
             it('should fail if anything other than a message envelope is passed', function () {
@@ -395,7 +395,7 @@ describe('Message Receipt instance', function () {
         const msgRcpt = new ctnOffChainLib.MessageReceipt({
             msgInfo: sendMsgEnv,
             timestamp: new Date('2019-11-09').getTime(),
-            msgEnvCID: msgEnvCID
+            msgEnvCid: msgEnvCid
         });
         const msgRcptHex = '55520144e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc0012205974ca7b881b524eaffab90cdc533a43e2c1e3cc9ffbbb8c87f722f03c57744c';
 
@@ -421,7 +421,7 @@ describe('Parse Message Receipt', function () {
     const keyPair1 = bitcoinLib.ECPair.fromWIF('KySHu9Pe4eZmBQ8unFQGR1oNaYpUeXwmYux386mTioD1L72WYtYf');
     const keyPair2 = bitcoinLib.ECPair.fromWIF('L33Ty5rCmDg6Tzvi5D25aL7RCc2AV8ksN2Zq78wpKLpmznoqiSNs');
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
-    const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+    const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
     const sendMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
         msgOpts: 0x03,
@@ -429,26 +429,26 @@ describe('Parse Message Receipt', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const msgEnvCID = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
+    const msgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
 
     const msgRcpt = new ctnOffChainLib.MessageReceipt({
         msgInfo: sendMsgEnv,
         timestamp: new Date('2019-11-09').getTime(),
-        msgEnvCID: msgEnvCID
+        msgEnvCid: msgEnvCid
     });
     const msgRcptBuf = msgRcpt.buffer;
-    const msgEnvCIDLength = msgRcptBuf.byteLength - 51;
+    const msgEnvCidLength = msgRcptBuf.byteLength - 51;
 
     const signMsgRcpt = new ctnOffChainLib.MessageReceipt({
         msgInfo: sendMsgEnv,
         timestamp: new Date('2019-11-09').getTime(),
-        msgEnvCID: msgEnvCID
+        msgEnvCid: msgEnvCid
     });
     signMsgRcpt.sign(keyPair2);
     const signMsgRcptBuf = signMsgRcpt.buffer;
-    const signMsgEnvCIDLength = signMsgRcptBuf.byteLength - 51;
+    const signMsgEnvCidLength = signMsgRcptBuf.byteLength - 51;
 
     it('should throw if incorrect parameter type is passed', function () {
         expect(() => {
@@ -503,7 +503,7 @@ describe('Parse Message Receipt', function () {
 
     it('should throw if message envelope CID bytes have an invalid value', function () {
         const badMsgRcptBuf = Buffer.concat([msgRcptBuf]);
-        badMsgRcptBuf.fill(0xff, 51, 51 + msgEnvCIDLength);
+        badMsgRcptBuf.fill(0xff, 51, 51 + msgEnvCidLength);
 
         expect(() => {
             ctnOffChainLib.MessageReceipt.fromBuffer(badMsgRcptBuf);

@@ -1,4 +1,3 @@
-const CID = require('cids');
 const bitcoinLib = require('bitcoinjs-lib');
 const varint = require('varint');
 const multihashing = require('multihashing');
@@ -23,7 +22,7 @@ class MessageReceipt {
      *                               - receiverPubKeyHash (String|Buffer) The public key hash of the Catenis device to which the message was sent
      *                           - timestamp (Integer) (optional) The timestamp (milliseconds from Unix's epoch) when the message receipt was created.
      *                               If not specified, the current time is used
-     *                           - msgEnvCID (String|Buffer|CID) The IPFS CID of the message envelope of the message for which this receipt is issued
+     *                           - msgEnvCid (String|Buffer|CID) The IPFS CID of the message envelope of the message for which this receipt is issued
      */
     constructor(rcptInfo) {
         // Validate parameter
@@ -76,13 +75,13 @@ class MessageReceipt {
             this.timestamp = Date.now();
         }
 
-        this.msgEnvCID = Util.validateCID(rcptInfo.msgEnvCID);
+        this.msgEnvCid = Util.validateCid(rcptInfo.msgEnvCid);
 
-        if (!this.msgEnvCID) {
-            rcptInfoErrors.push('missing or invalid `msgEnvCID` property');
+        if (!this.msgEnvCid) {
+            rcptInfoErrors.push('missing or invalid `msgEnvCid` property');
         }
-        else if (this.msgEnv && !multihashing.verify(this.msgEnvCID.multihash, this.msgEnv.buffer)) {
-            rcptInfoErrors.push('inconsistent `msgEnvCID` property: it does not match message envelope');
+        else if (this.msgEnv && !multihashing.verify(this.msgEnvCid.multihash, this.msgEnv.buffer)) {
+            rcptInfoErrors.push('inconsistent `msgEnvCid` property: it does not match message envelope');
         }
 
         if (rcptInfoErrors.length > 0) {
@@ -100,7 +99,7 @@ class MessageReceipt {
         offset += this.receiverPubKeyHash.copy(fixedHeader, offset);
         Util.writeInt64BE(this.timestamp, fixedHeader, offset);
 
-        const header = Buffer.concat([fixedHeader, this.msgEnvCID.buffer]);
+        const header = Buffer.concat([fixedHeader, this.msgEnvCid.buffer]);
 
         // Add header length prefix
         let lenPrefixLength = 1;
@@ -142,7 +141,7 @@ class MessageReceipt {
             this.checkMessageError = 'Invalid message: it does not match sender and/or receiver';
         }
 
-        if (!this.checkMessageError && !multihashing.verify(this.msgEnvCID.multihash, msgEnv.buffer)) {
+        if (!this.checkMessageError && !multihashing.verify(this.msgEnvCid.multihash, msgEnv.buffer)) {
             this.checkMessageError = 'Invalid message: it does not match message envelope CID';
         }
 
@@ -233,7 +232,7 @@ class MessageReceipt {
         offset += 20;
         const timestamp = Util.readInt64BE(buf, offset);
         offset += 8;
-        const msgEnvCID = buf.slice(offset, headerLength);
+        const msgEnvCid = buf.slice(offset, headerLength);
         offset = headerLength;
 
         const headerErrors = [];
@@ -251,10 +250,10 @@ class MessageReceipt {
         }
 
         const rcptInfo = {
-            msgEnvCID: Util.validateCID(msgEnvCID)
+            msgEnvCid: Util.validateCid(msgEnvCid)
         };
 
-        if (!rcptInfo.msgEnvCID) {
+        if (!rcptInfo.msgEnvCid) {
             headerErrors.push('invalid message content CID');
         }
 

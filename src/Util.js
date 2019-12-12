@@ -30,15 +30,15 @@ module.exports = {
     isValidTimestamp(timestamp) {
         return Number.isInteger(timestamp) && timestamp >= MIN_TIMESTAMP && timestamp <= MAX_TIMESTAMP;
     },
-    validateCID(cid) {
-        let validCID;
+    validateCid(cid) {
+        let validCid;
 
         try {
-            validCID = new CID(cid);
+            validCid = new CID(cid);
         }
         catch (err) {}
 
-        return validCID;
+        return validCid;
     },
     keyPairFromPublicKey(pubKey) {
         const opts = pubKey.byteLength > COMPRESSED_PUB_KEY_LENGTH ? {compressed: false} : undefined;

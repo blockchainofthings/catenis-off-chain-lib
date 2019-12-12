@@ -17,7 +17,7 @@ class BatchDocument {
      *                                     Can be either an instance of MessageEnvelope, and instance of MessageReceipt or a literal object with the following properties:
      *                                     - senderPubKeyHash (String|Buffer) The public key hash of the Catenis device that sent the message
      *                                     - receiverPubKeyHash (String|Buffer) (optional) The public key hash of the Catenis device to which the message was sent
-     *                                 - msgDataCID (String|Buffer|CID) The IPFS CID of the message envelope or receipt to add to the batch
+     *                                 - msgDataCid (String|Buffer|CID) The IPFS CID of the message envelope or receipt to add to the batch
      */
     constructor(entries) {
         if (!Array.isArray(entries)) {
@@ -30,20 +30,20 @@ class BatchDocument {
         }
 
         this.entries = [];
-        this.msgDataCIDs = new Set();
+        this.msgDataCids = new Set();
         this.senderPubKeyHashes = new Map();
         this.receiverPubKeyHashes = new Map();
 
         for (let idx = 0, numEntries = entries.length; idx < numEntries; idx++) {
             const result = validateEntry(entries[idx]);
             let error;
-            let strCID;
+            let strCid;
 
             if (!result.success) {
                 error = result.error;
             }
-            else if (this.msgDataCIDs.has(strCID = result.entry.msgDataCID.toString())) {
-                error = 'duplicate `msgDataCID` property value';
+            else if (this.msgDataCids.has(strCid = result.entry.msgDataCid.toString())) {
+                error = 'duplicate `msgDataCid` property value';
             }
 
             if (error) {
@@ -51,7 +51,7 @@ class BatchDocument {
             }
 
             this.entries.push(result.entry);
-            this.msgDataCIDs.add(strCID);
+            this.msgDataCids.add(strCid);
             addMapListItem(this.senderPubKeyHashes, result.entry.senderPubKeyHash.toString('base64'), idx);
 
             if (result.entry.receiverPubKeyHash) {
@@ -60,11 +60,11 @@ class BatchDocument {
         }
 
         // Instantiate Merkle tree
-        this.tree = merkle(this.entries.map(entry => conformLeafCID(entry.msgDataCID)), nodeHash);
+        this.tree = merkle(this.entries.map(entry => conformLeafCid(entry.msgDataCid)), nodeHash);
 
         // Assemble batch document
         this.doc = {
-            msgData: Array.from(this.msgDataCIDs),
+            msgData: Array.from(this.msgDataCids),
             senders: Array.from(this.senderPubKeyHashes),
             receivers: Array.from(this.receiverPubKeyHashes),
             merkleRoot: this.merkleRoot.toString('base64')
@@ -151,14 +151,14 @@ class BatchDocument {
         return !hasError;
     }
 
-    isMessageDataInBatch(msgDataCID) {
-        msgDataCID = Util.validateCID(msgDataCID);
+    isMessageDataInBatch(msgDataCid) {
+        msgDataCid = Util.validateCid(msgDataCid);
 
-        if (!msgDataCID) {
+        if (!msgDataCid) {
             throw new Error('Invalid message data (envelope or receipt) CID');
         }
 
-        const proof = merkleProof(this.tree, conformLeafCID(msgDataCID));
+        const proof = merkleProof(this.tree, conformLeafCid(msgDataCid));
 
         if (proof) {
             return merkleProof.verify(proof, nodeHash);
@@ -225,7 +225,7 @@ class BatchDocument {
         const entries = json.msgData.map(msgData => {
             return {
                 msgInfo: {},
-                msgDataCID: msgData
+                msgDataCid: msgData
             }
         });
         const numEntries = entries.length;
@@ -334,13 +334,13 @@ function validateEntry(entry) {
             }
         }
 
-        validatedEntry.msgDataCID = Util.validateCID(entry.msgDataCID);
+        validatedEntry.msgDataCid = Util.validateCid(entry.msgDataCid);
 
-        if (!validatedEntry.msgDataCID) {
-            errors.push('missing or invalid `msgDataCID` property');
+        if (!validatedEntry.msgDataCid) {
+            errors.push('missing or invalid `msgDataCid` property');
         }
-        else if (validatedEntry.msgData && !multihashing.verify(validatedEntry.msgDataCID.multihash, validatedEntry.msgData.buffer)) {
-            errors.push('inconsistent `msgDataCID` property: it does not match message data');
+        else if (validatedEntry.msgData && !multihashing.verify(validatedEntry.msgDataCid.multihash, validatedEntry.msgData.buffer)) {
+            errors.push('inconsistent `msgDataCid` property: it does not match message data');
         }
     }
 
@@ -369,7 +369,7 @@ function nodeHash(node) {
     return Buffer.concat([new Uint8Array([0x1]), bitcoinLib.crypto.hash256(node)]);
 }
 
-function conformLeafCID(cid) {
+function conformLeafCid(cid) {
     return Buffer.concat([new Uint8Array([0x00]), cid.buffer]);
 }
 
@@ -384,7 +384,7 @@ function checkMsgDataItem(msgData, entry) {
         error = 'Invalid message data: it does not match sender and/or receiver';
     }
 
-    if (!error && !multihashing.verify(entry.msgDataCID.multihash, msgData.buffer)) {
+    if (!error && !multihashing.verify(entry.msgDataCid.multihash, msgData.buffer)) {
         error = 'Invalid message data: it does not match message data CID';
     }
     

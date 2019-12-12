@@ -229,7 +229,7 @@ describe('Create new Message Envelope', function () {
     });
 
     it('should return a MessageEnvelope object', function () {
-        const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+        const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
 
         const msgEnv = new ctnOffChainLib.MessageEnvelope({
             msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -238,14 +238,14 @@ describe('Create new Message Envelope', function () {
             receiverPubKeyHash: Buffer.alloc(20, 0xff),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCID.buffer
+            msgRef: msgCid.buffer
         });
 
         expect(msgEnv).to.be.an.instanceof(ctnOffChainLib.MessageEnvelope);
     });
 
     it('should return a MessageEnvelope object if specifying log message with no receiver public key', function () {
-        const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+        const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
 
         const msgEnv = new ctnOffChainLib.MessageEnvelope({
             msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -253,14 +253,14 @@ describe('Create new Message Envelope', function () {
             senderPubKeyHash: Buffer.alloc(20, 0xff),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCID.buffer
+            msgRef: msgCid.buffer
         });
 
         expect(msgEnv).to.be.an.instanceof(ctnOffChainLib.MessageEnvelope);
     });
 
     it('should return a MessageEnvelope object even if no timestamp is passed', function () {
-        const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+        const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
 
         const msgEnv = new ctnOffChainLib.MessageEnvelope({
             msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -269,7 +269,7 @@ describe('Create new Message Envelope', function () {
             receiverPubKeyHash: Buffer.alloc(20, 0xff),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCID.buffer
+            msgRef: msgCid.buffer
         });
 
         expect(msgEnv).to.be.an.instanceof(ctnOffChainLib.MessageEnvelope);
@@ -282,7 +282,7 @@ describe('Message Envelope instance', function () {
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
 
     describe ('for send message with encryption and read confirmation', function () {
-        const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+        const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
         const msgEnv = new ctnOffChainLib.MessageEnvelope({
             msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
             msgOpts: 0x03,
@@ -290,7 +290,7 @@ describe('Message Envelope instance', function () {
             receiverPubKeyHash: hashPubKey(keyPair2),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCID.buffer
+            msgRef: msgCid.buffer
         });
         const msgEnvHex = '584501010344e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a';
 
@@ -361,7 +361,7 @@ describe('Message Envelope instance', function () {
     });
 
     describe ('for log message without encryption', function () {
-        const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+        const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
         const msgEnv = new ctnOffChainLib.MessageEnvelope({
             msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
             msgOpts: 0x00,
@@ -369,7 +369,7 @@ describe('Message Envelope instance', function () {
             receiverPubKeyHash: hashPubKey(keyPair2),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCID.buffer
+            msgRef: msgCid.buffer
         });
         const msgEnvHex = '584501000044e81b67da0be30136be2bc058232b721265c7fa00000000000000000000000000000000000000000000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a';
 
@@ -431,7 +431,7 @@ describe('Parse Message Envelope', function () {
     const keyPair1 = bitcoinLib.ECPair.fromWIF('KySHu9Pe4eZmBQ8unFQGR1oNaYpUeXwmYux386mTioD1L72WYtYf');
     const keyPair2 = bitcoinLib.ECPair.fromWIF('L33Ty5rCmDg6Tzvi5D25aL7RCc2AV8ksN2Zq78wpKLpmznoqiSNs');
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
-    const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+    const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
     const msgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
         msgOpts: 0x03,
@@ -439,7 +439,7 @@ describe('Parse Message Envelope', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
     const msgEnvBuf = msgEnv.buffer;
     const msgRefLength = msgEnvBuf.byteLength - 54;
@@ -451,7 +451,7 @@ describe('Parse Message Envelope', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
     signMsgEnv.sign(keyPair1);
     const signMsgEnvBuf = signMsgEnv.buffer;
@@ -556,7 +556,7 @@ describe('Parse Message Envelope', function () {
             senderPubKeyHash: hashPubKey(keyPair1),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCID.buffer
+            msgRef: msgCid.buffer
         });
 
         it('should return an object that matches original one', function () {

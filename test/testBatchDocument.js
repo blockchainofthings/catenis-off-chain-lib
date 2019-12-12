@@ -10,7 +10,7 @@ describe('Create new Batch Document', function () {
     const keyPair1 = bitcoinLib.ECPair.fromWIF('KySHu9Pe4eZmBQ8unFQGR1oNaYpUeXwmYux386mTioD1L72WYtYf');
     const keyPair2 = bitcoinLib.ECPair.fromWIF('L33Ty5rCmDg6Tzvi5D25aL7RCc2AV8ksN2Zq78wpKLpmznoqiSNs');
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
-    const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+    const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
     const sendMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
         msgOpts: 0x03,
@@ -18,24 +18,24 @@ describe('Create new Batch Document', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const sendMsgEnvCID = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
+    const sendMsgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
         msgOpts: 0x01,
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const logMsgEnvCID = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
+    const logMsgEnvCid = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
     const sendMsgRcpt = new ctnOffChainLib.MessageReceipt({
         msgInfo: sendMsgEnv,
         timestamp: new Date('2019-11-09').getTime(),
-        msgEnvCID: sendMsgEnvCID
+        msgEnvCid: sendMsgEnvCid
     });
-    const sendMsgRcptCID = new CID(0, 'dag-pb', multihashing(sendMsgRcpt.buffer,'sha2-256'));
+    const sendMsgRcptCid = new CID(0, 'dag-pb', multihashing(sendMsgRcpt.buffer,'sha2-256'));
 
     it('should throw if no parameter is passed', function () {
         expect(() => {
@@ -146,7 +146,7 @@ describe('Create new Batch Document', function () {
         }).to.throw(Error, 'invalid `msgInfo.receiverPubKeyHash` property');
     });
 
-    it('should throw if an entry with an object missing property `msgDataCID` is passed', function () {
+    it('should throw if an entry with an object missing property `msgDataCid` is passed', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
                 msgInfo: {
@@ -154,28 +154,28 @@ describe('Create new Batch Document', function () {
                     receiverPubKeyHash: Buffer.alloc(20, 0xff)
                 }
             }]);
-        }).to.throw(Error, 'missing or invalid `msgDataCID` property');
+        }).to.throw(Error, 'missing or invalid `msgDataCid` property');
     });
 
-    it('should throw if an entry with an object with an invalid `msgDataCID` property is passed', function () {
+    it('should throw if an entry with an object with an invalid `msgDataCid` property is passed', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
                 msgInfo: {
                     senderPubKeyHash: Buffer.alloc(20, 0xff),
                     receiverPubKeyHash: Buffer.alloc(20, 0xff)
                 },
-                msgDataCID: Buffer.from('bla')
+                msgDataCid: Buffer.from('bla')
             }]);
-        }).to.throw(Error, 'missing or invalid `msgDataCID` property');
+        }).to.throw(Error, 'missing or invalid `msgDataCid` property');
     });
 
-    it('should throw if an entry with an object with an inconsistent value in property `msgEnvCID` is passed', function () {
+    it('should throw if an entry with an object with an inconsistent value in property `msgEnvCid` is passed', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
                 msgInfo: sendMsgEnv,
-                msgDataCID: logMsgEnvCID
+                msgDataCid: logMsgEnvCid
             }]);
-        }).to.throw(Error, 'inconsistent `msgDataCID` property: it does not match message data');
+        }).to.throw(Error, 'inconsistent `msgDataCid` property: it does not match message data');
     });
 
     it('should successfully return when passing one entry with a `msgInfo` object', function () {
@@ -185,7 +185,7 @@ describe('Create new Batch Document', function () {
                     senderPubKeyHash: sendMsgEnv.senderPubKeyHash,
                     receiverPubKeyHash: sendMsgEnv.receiverPubKeyHash
                 },
-                msgDataCID: sendMsgEnvCID
+                msgDataCid: sendMsgEnvCid
             }]);
         }).to.not.throw();
     });
@@ -195,7 +195,7 @@ describe('Create new Batch Document', function () {
                 msgInfo: {
                     senderPubKeyHash: logMsgEnv.senderPubKeyHash
                 },
-                msgDataCID: logMsgEnvCID
+                msgDataCid: logMsgEnvCid
             }]);
         }).to.not.throw();
     });
@@ -204,7 +204,7 @@ describe('Create new Batch Document', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
                 msgInfo: logMsgEnv,
-                msgDataCID: logMsgEnvCID
+                msgDataCid: logMsgEnvCid
             }]);
         }).to.not.throw();
     });
@@ -213,7 +213,7 @@ describe('Create new Batch Document', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
                 msgInfo: sendMsgRcpt,
-                msgDataCID: sendMsgRcptCID
+                msgDataCid: sendMsgRcptCid
             }]);
         }).to.not.throw();
     });
@@ -222,26 +222,26 @@ describe('Create new Batch Document', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
                 msgInfo: sendMsgRcpt,
-                msgDataCID: sendMsgRcptCID
+                msgDataCid: sendMsgRcptCid
             }, {
                 msgInfo: {}
             }]);
         }).to.throw(Error, 'Invalid entry #2');
     });
 
-    it('should throw if an entry with a duplicate `msgDataCID` property is passed', function () {
+    it('should throw if an entry with a duplicate `msgDataCid` property is passed', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
                 msgInfo: sendMsgRcpt,
-                msgDataCID: sendMsgRcptCID
+                msgDataCid: sendMsgRcptCid
             }, {
                 msgInfo: {
                     senderPubKeyHash: sendMsgRcpt.senderPubKeyHash,
                     receiverPubKeyHash: sendMsgRcpt.receiverPubKeyHash
                 },
-                msgDataCID: sendMsgRcptCID
+                msgDataCid: sendMsgRcptCid
             }]);
-        }).to.throw(Error, 'duplicate `msgDataCID` property value');
+        }).to.throw(Error, 'duplicate `msgDataCid` property value');
     });
 });
 
@@ -249,7 +249,7 @@ describe('Batch Document instance', function () {
     const keyPair1 = bitcoinLib.ECPair.fromWIF('KySHu9Pe4eZmBQ8unFQGR1oNaYpUeXwmYux386mTioD1L72WYtYf');
     const keyPair2 = bitcoinLib.ECPair.fromWIF('L33Ty5rCmDg6Tzvi5D25aL7RCc2AV8ksN2Zq78wpKLpmznoqiSNs');
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
-    const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+    const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
     const sendMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
         msgOpts: 0x03,
@@ -257,35 +257,35 @@ describe('Batch Document instance', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const sendMsgEnvCID = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
+    const sendMsgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
         msgOpts: 0x01,
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const logMsgEnvCID = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
+    const logMsgEnvCid = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
     const sendMsgRcpt = new ctnOffChainLib.MessageReceipt({
         msgInfo: sendMsgEnv,
         timestamp: new Date('2019-11-09').getTime(),
-        msgEnvCID: sendMsgEnvCID
+        msgEnvCid: sendMsgEnvCid
     });
-    const sendMsgRcptCID = new CID(0, 'dag-pb', multihashing(sendMsgRcpt.buffer,'sha2-256'));
+    const sendMsgRcptCid = new CID(0, 'dag-pb', multihashing(sendMsgRcpt.buffer,'sha2-256'));
 
     describe('with only message data (MessageEnvelope or MessageReceipt) instances', function () {
         const batchDoc = new ctnOffChainLib.BatchDocument([{
             msgInfo: sendMsgEnv,
-            msgDataCID: sendMsgEnvCID
+            msgDataCid: sendMsgEnvCid
         }, {
             msgInfo: logMsgEnv,
-            msgDataCID: logMsgEnvCID
+            msgDataCid: logMsgEnvCid
         }, {
             msgInfo: sendMsgRcpt,
-            msgDataCID: sendMsgRcptCID
+            msgDataCid: sendMsgRcptCid
         }]);
 
         it('should correctly report that it is not yet built', function () {
@@ -315,13 +315,13 @@ describe('Batch Document instance', function () {
         });
 
         it('should correctly report that message data is in batch', function () {
-            [sendMsgEnvCID, logMsgEnvCID, sendMsgRcptCID].forEach((msgDataCID => {
-                expect(batchDoc.isMessageDataInBatch(msgDataCID)).to.be.true;
+            [sendMsgEnvCid, logMsgEnvCid, sendMsgRcptCid].forEach((msgDataCid => {
+                expect(batchDoc.isMessageDataInBatch(msgDataCid)).to.be.true;
             }));
         });
 
         it('should correctly report that message data is not in batch', function () {
-            expect(batchDoc.isMessageDataInBatch(msgCID)).to.be.false;
+            expect(batchDoc.isMessageDataInBatch(msgCid)).to.be.false;
         });
 
         describe('after building it', function () {
@@ -355,18 +355,18 @@ describe('Batch Document instance', function () {
                 senderPubKeyHash: sendMsgEnv.senderPubKeyHash,
                 receiverPubKeyHash: sendMsgEnv.receiverPubKeyHash
             },
-            msgDataCID: sendMsgEnvCID
+            msgDataCid: sendMsgEnvCid
         }, {
             msgInfo: {
                 senderPubKeyHash: logMsgEnv.senderPubKeyHash
             },
-            msgDataCID: logMsgEnvCID
+            msgDataCid: logMsgEnvCid
         }, {
             msgInfo: {
                 senderPubKeyHash: sendMsgRcpt.senderPubKeyHash,
                 receiverPubKeyHash: sendMsgRcpt.receiverPubKeyHash
             },
-            msgDataCID: sendMsgRcptCID
+            msgDataCid: sendMsgRcptCid
         }]);
 
         it('should correctly report that not all message data are checked', function () {
@@ -380,7 +380,7 @@ describe('Batch Document instance', function () {
         describe('checking message data', function () {
             const keyPair3 = bitcoinLib.ECPair.makeRandom();
             const keyPair4 = bitcoinLib.ECPair.makeRandom();
-            const msgCID2 = new CID(0, 'dag-pb', multihashing(Buffer.from('Another test message'),'sha2-256'));
+            const msgCid2 = new CID(0, 'dag-pb', multihashing(Buffer.from('Another test message'),'sha2-256'));
             const sendMsgEnv2 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
                 msgOpts: 0x03,
@@ -388,7 +388,7 @@ describe('Batch Document instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair3),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID2.buffer
+                msgRef: msgCid2.buffer
             });
             const sendMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -397,7 +397,7 @@ describe('Batch Document instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID2.buffer
+                msgRef: msgCid2.buffer
             });
             const sendMsgEnv4 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -406,7 +406,7 @@ describe('Batch Document instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair4),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID2.buffer
+                msgRef: msgCid2.buffer
             });
             const logMsgEnv2 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -414,7 +414,7 @@ describe('Batch Document instance', function () {
                 senderPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID2.buffer
+                msgRef: msgCid2.buffer
             });
             const logMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -422,7 +422,7 @@ describe('Batch Document instance', function () {
                 senderPubKeyHash: hashPubKey(keyPair1),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCID2.buffer
+                msgRef: msgCid2.buffer
             });
 
             it('should throw if it is passed less message data items than the number of entries', function () {
@@ -534,15 +534,15 @@ describe('Batch Document instance', function () {
     describe('with a mix of message data (MessageEnvelope or MessageReceipt) instances and `msgInfo` objects', function () {
         const batchDoc = new ctnOffChainLib.BatchDocument([{
             msgInfo: sendMsgEnv,
-            msgDataCID: sendMsgEnvCID
+            msgDataCid: sendMsgEnvCid
         }, {
             msgInfo: {
                 senderPubKeyHash: logMsgEnv.senderPubKeyHash
             },
-            msgDataCID: logMsgEnvCID
+            msgDataCid: logMsgEnvCid
         }, {
             msgInfo: sendMsgRcpt,
-            msgDataCID: sendMsgRcptCID
+            msgDataCid: sendMsgRcptCid
         }]);
 
         it('should correctly report that not all message data are checked', function () {
@@ -559,7 +559,7 @@ describe('Parse Batch Document', function () {
     const keyPair1 = bitcoinLib.ECPair.fromWIF('KySHu9Pe4eZmBQ8unFQGR1oNaYpUeXwmYux386mTioD1L72WYtYf');
     const keyPair2 = bitcoinLib.ECPair.fromWIF('L33Ty5rCmDg6Tzvi5D25aL7RCc2AV8ksN2Zq78wpKLpmznoqiSNs');
     const hashPubKey = keyPair => bitcoinLib.crypto.hash160(keyPair.publicKey);
-    const msgCID = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
+    const msgCid = new CID(0, 'dag-pb', multihashing(Buffer.from('This is only a test'),'sha2-256'));
     const sendMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
         msgOpts: 0x03,
@@ -567,34 +567,34 @@ describe('Parse Batch Document', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const sendMsgEnvCID = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
+    const sendMsgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
         msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
         msgOpts: 0x01,
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCID.buffer
+        msgRef: msgCid.buffer
     });
-    const logMsgEnvCID = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
+    const logMsgEnvCid = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
     const sendMsgRcpt = new ctnOffChainLib.MessageReceipt({
         msgInfo: sendMsgEnv,
         timestamp: new Date('2019-11-09').getTime(),
-        msgEnvCID: sendMsgEnvCID
+        msgEnvCid: sendMsgEnvCid
     });
-    const sendMsgRcptCID = new CID(0, 'dag-pb', multihashing(sendMsgRcpt.buffer,'sha2-256'));
+    const sendMsgRcptCid = new CID(0, 'dag-pb', multihashing(sendMsgRcpt.buffer,'sha2-256'));
 
     const batchDoc = new ctnOffChainLib.BatchDocument([{
         msgInfo: sendMsgEnv,
-        msgDataCID: sendMsgEnvCID
+        msgDataCid: sendMsgEnvCid
     }, {
         msgInfo: logMsgEnv,
-        msgDataCID: logMsgEnvCID
+        msgDataCid: logMsgEnvCid
     }, {
         msgInfo: sendMsgRcpt,
-        msgDataCID: sendMsgRcptCID
+        msgDataCid: sendMsgRcptCid
     }]);
     batchDoc.build();
     const batchDocBuf = batchDoc.buffer;
