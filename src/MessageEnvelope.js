@@ -14,8 +14,8 @@ class MessageEnvelope {
      * Class constructor
      * @param msgInfo (Object) Object containing information describing the message envelope to create, with the
      *                          following properties:
-     *                          - msgType (Message.msgType) The message type
-     *                          - msgOpts (Message.msgOptions) A bitwise data structure specifying the options for the message
+     *                          - msgType (MessageEnvelope.msgType) The message type
+     *                          - msgOpts (MessageEnvelope.msgOptions) A bitwise data structure specifying the options for the message
      *                          - senderPubKeyHash (String|Buffer) The public key hash of the Catenis device that is sending the message
      *                          - receiverPubKeyHash (String|Buffer) (optional) The public key hash of the Catenis device to which message is being sent
      *                          - timestamp (Integer) (optional) The timestamp (milliseconds from Unix's epoch) when the message was created.
