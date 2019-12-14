@@ -255,6 +255,10 @@ describe('Message Receipt instance', function () {
             expect(msgRcpt.hex).to.equal(msgRcptHex);
         });
 
+        it('should return the correct base64 string', function () {
+            expect(msgRcpt.base64).to.equal(Buffer.from(msgRcptHex, 'hex').toString('base64'));
+        });
+
         describe('checking message', function () {
             const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -414,6 +418,10 @@ describe('Message Receipt instance', function () {
         it('should return the correct hex string', function () {
             expect(msgRcpt.hex).to.equal(msgRcptHex);
         });
+
+        it('should return the correct base64 string', function () {
+            expect(msgRcpt.base64).to.equal(Buffer.from(msgRcptHex, 'hex').toString('base64'));
+        });
     });
 });
 
@@ -521,6 +529,14 @@ describe('Parse Message Receipt', function () {
             const msgRcpt2 = ctnOffChainLib.MessageReceipt.fromHex(msgRcptBuf.toString('hex'));
 
             expect(msgRcpt2.hex).to.equals(msgRcpt.hex);
+        });
+    });
+
+    describe('from base64', function () {
+        it('should return an object that matches original one', function () {
+            const msgRcpt2 = ctnOffChainLib.MessageReceipt.fromBase64(msgRcptBuf.toString('base64'));
+
+            expect(msgRcpt2.base64).to.equals(msgRcpt.base64);
         });
     });
 

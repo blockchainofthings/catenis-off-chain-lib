@@ -314,6 +314,10 @@ describe('Message Envelope instance', function () {
             expect(msgEnv.hex).to.equal(msgEnvHex);
         });
 
+        it('should return the correct base64 string', function () {
+            expect(msgEnv.base64).to.equal(Buffer.from(msgEnvHex, 'hex').toString('base64'));
+        });
+
         describe('signing', function () {
             const uncomprKeyPair = bitcoinLib.ECPair.makeRandom({compressed: false});
             const anyKeyPair = bitcoinLib.ECPair.makeRandom();
@@ -357,6 +361,12 @@ describe('Message Envelope instance', function () {
 
                 expect(msgEnv.hex).to.equal(signMsgEnvHex);
             });
+
+            it('should return the correct base64 string afterwards', function () {
+                const signMsgEnvHex = '584501010344e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a40ef8f25181c83f23ab43965cd9184d8906ff0dcbf86ae0583e5b22a475dc7c7c16698e9316cba3f2a1c78d2f17a8de8e68a9af8e7b8942ce76e7fb10ec2ef409d023fcff8acde07c6330a459da6332db3ea563ee353dadf0a955026ae2c08bd1992';
+
+                expect(msgEnv.base64).to.equal(Buffer.from(signMsgEnvHex, 'hex').toString('base64'));
+            });
         });
     });
 
@@ -393,6 +403,10 @@ describe('Message Envelope instance', function () {
             expect(msgEnv.hex).to.equal(msgEnvHex);
         });
 
+        it('should return the correct base64 string', function () {
+            expect(msgEnv.base64).to.equal(Buffer.from(msgEnvHex, 'hex').toString('base64'));
+        });
+
         describe('signing', function () {
             const uncomprKeyPair = bitcoinLib.ECPair.makeRandom({compressed: false});
             const anyKeyPair = bitcoinLib.ECPair.makeRandom();
@@ -422,6 +436,12 @@ describe('Message Envelope instance', function () {
                 const signMsgEnvHex = '584501000044e81b67da0be30136be2bc058232b721265c7fa00000000000000000000000000000000000000000000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a40aa4a03babe2fb5554c405bfaba868d6f00188c69cbe2418ae3c74558d0526f850635c1e1c60c5806a1c8b465accbe3ce3b90e03d21b32e65f3ff3ebfbb8ee330023fcff8acde07c6330a459da6332db3ea563ee353dadf0a955026ae2c08bd1992';
 
                 expect(msgEnv.hex).to.equal(signMsgEnvHex);
+            });
+
+            it('should return the correct base64 string afterwards', function () {
+                const signMsgEnvHex = '584501000044e81b67da0be30136be2bc058232b721265c7fa00000000000000000000000000000000000000000000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a40aa4a03babe2fb5554c405bfaba868d6f00188c69cbe2418ae3c74558d0526f850635c1e1c60c5806a1c8b465accbe3ce3b90e03d21b32e65f3ff3ebfbb8ee330023fcff8acde07c6330a459da6332db3ea563ee353dadf0a955026ae2c08bd1992';
+
+                expect(msgEnv.base64).to.equal(Buffer.from(signMsgEnvHex, 'hex').toString('base64'));
             });
         });
     });
@@ -546,6 +566,14 @@ describe('Parse Message Envelope', function () {
             const msgEnv2 = ctnOffChainLib.MessageEnvelope.fromHex(msgEnvBuf.toString('hex'));
 
             expect(msgEnv2.hex).to.equals(msgEnv.hex);
+        });
+    });
+
+    describe('from base64', function () {
+        it('should return an object that matches original one', function () {
+            const msgEnv2 = ctnOffChainLib.MessageEnvelope.fromBase64(msgEnvBuf.toString('base64'));
+
+            expect(msgEnv2.base64).to.equals(msgEnv.base64);
         });
     });
 

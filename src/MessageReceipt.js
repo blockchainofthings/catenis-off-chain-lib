@@ -117,6 +117,10 @@ class MessageReceipt {
         return this.buffer.toString('hex');
     }
 
+    get base64() {
+        return this.buffer.toString('base64');
+    }
+
     get isMessageChecked() {
         return !!this.msgEnv;
     }
@@ -341,6 +345,10 @@ class MessageReceipt {
 
     static fromHex(hex) {
         return MessageReceipt.fromBuffer(Buffer.from(hex, 'hex'));
+    }
+
+    static fromBase64(base64) {
+        return MessageReceipt.fromBuffer(Buffer.from(base64, 'base64'));
     }
 }
 

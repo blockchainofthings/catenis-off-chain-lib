@@ -296,6 +296,10 @@ describe('Batch Document instance', function () {
             expect(batchDoc.hex).to.be.undefined;
         });
 
+        it('should correctly return no base64 value', function () {
+            expect(batchDoc.base64).to.be.undefined;
+        });
+
         it('should return the correct Merkle root', function () {
             expect(batchDoc.merkleRoot.equals(Buffer.from('01c596972b825bcd47fcd62eb2881c6fa65636779f37c44e8d7321162b3142ddba', 'hex'))).to.be.true;
         });
@@ -339,6 +343,10 @@ describe('Batch Document instance', function () {
 
             it('should return the correct hex value', function () {
                 expect(batchDoc.hex).to.equal(batchDocHex);
+            });
+
+            it('should return the correct base64 value', function () {
+                expect(batchDoc.base64).to.equal(Buffer.from(batchDocHex, 'hex').toString('base64'));
             });
 
             it('should should not fail when trying to rebuild it', function () {
@@ -804,6 +812,14 @@ describe('Parse Batch Document', function () {
             const batchDoc2 = ctnOffChainLib.BatchDocument.fromHex(batchDocBuf.toString('hex'));
 
             expect(batchDoc2.hex).to.equals(batchDoc.hex);
+        });
+    });
+
+    describe('from base64', function () {
+        it('should return an object that matches original one', function () {
+            const batchDoc2 = ctnOffChainLib.BatchDocument.fromBase64(batchDocBuf.toString('base64'));
+
+            expect(batchDoc2.base64).to.equals(batchDoc.base64);
         });
     });
 });

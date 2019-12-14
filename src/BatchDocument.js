@@ -81,6 +81,12 @@ class BatchDocument {
         }
     }
 
+    get base64() {
+        if (this.buffer) {
+            return this.buffer.toString('base64');
+        }
+    }
+
     get indicesEntryToCheckMessageData() {
         return this.entries.reduce((indices, entry, idx) => {
             if (!entry.msgData) {
@@ -293,6 +299,10 @@ class BatchDocument {
 
     static fromHex(hex) {
         return BatchDocument.fromBuffer(Buffer.from(hex, 'hex'));
+    }
+
+    static fromBase64(base64) {
+        return BatchDocument.fromBuffer(Buffer.from(base64, 'base64'));
     }
 }
 

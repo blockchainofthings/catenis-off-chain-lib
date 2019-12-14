@@ -121,6 +121,10 @@ class MessageEnvelope {
         return this.buffer.toString('hex');
     }
 
+    get base64() {
+        return this.buffer.toString('base64');
+    }
+
     get isSigned() {
         return this.hasSignature;
     }
@@ -334,6 +338,10 @@ class MessageEnvelope {
 
     static fromHex(hex) {
         return MessageEnvelope.fromBuffer(Buffer.from(hex, 'hex'));
+    }
+
+    static fromBase64(base64) {
+        return MessageEnvelope.fromBuffer(Buffer.from(base64, 'base64'));
     }
 }
 
