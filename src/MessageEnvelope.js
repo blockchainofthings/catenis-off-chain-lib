@@ -121,15 +121,15 @@ class MessageEnvelope {
         return this.buffer.toString('hex');
     }
 
-    isSigned() {
+    get isSigned() {
         return this.hasSignature;
     }
 
-    isMessageEncrypted() {
+    get isMessageEncrypted() {
         return !!(this.msgOpts & MessageEnvelope.msgOptions.encryption);
     }
 
-    isMessageWithReadConfirmation() {
+    get isMessageWithReadConfirmation() {
         return !!(this.msgOpts & MessageEnvelope.msgOptions.readConfirmation);
     }
 

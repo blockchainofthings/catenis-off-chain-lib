@@ -295,15 +295,15 @@ describe('Message Envelope instance', function () {
         const msgEnvHex = '584501010344e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a';
 
         it('should correctly report that message is encrypted', function () {
-            expect(msgEnv.isMessageEncrypted()).to.be.true;
+            expect(msgEnv.isMessageEncrypted).to.be.true;
         });
 
         it('should correctly report that sender expects a read confirmation', function () {
-            expect(msgEnv.isMessageWithReadConfirmation()).to.be.true;
+            expect(msgEnv.isMessageWithReadConfirmation).to.be.true;
         });
 
         it('should correctly report that it is not signed yet', function () {
-            expect(msgEnv.isSigned()).to.be.false;
+            expect(msgEnv.isSigned).to.be.false;
         });
 
         it('should correctly indicate that signature cannot be verified', function () {
@@ -335,7 +335,7 @@ describe('Message Envelope instance', function () {
                     msgEnv.sign(keyPair1);
                 }).not.to.throw();
 
-                expect(msgEnv.isSigned()).to.be.true;
+                expect(msgEnv.isSigned).to.be.true;
                 expect(msgEnv.verifySignature()).to.be.true;
             });
 
@@ -374,15 +374,15 @@ describe('Message Envelope instance', function () {
         const msgEnvHex = '584501000044e81b67da0be30136be2bc058232b721265c7fa00000000000000000000000000000000000000000000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a';
 
         it('should correctly report that message is not encrypted', function () {
-            expect(msgEnv.isMessageEncrypted()).to.be.false;
+            expect(msgEnv.isMessageEncrypted).to.be.false;
         });
 
         it('should correctly report that sender does not expect a read confirmation', function () {
-            expect(msgEnv.isMessageWithReadConfirmation()).to.be.false;
+            expect(msgEnv.isMessageWithReadConfirmation).to.be.false;
         });
 
         it('should correctly report that it is not signed yet', function () {
-            expect(msgEnv.isSigned()).to.be.false;
+            expect(msgEnv.isSigned).to.be.false;
         });
 
         it('should correctly indicate that signature cannot be verified', function () {
@@ -414,7 +414,7 @@ describe('Message Envelope instance', function () {
                     msgEnv.sign(keyPair1);
                 }).not.to.throw();
 
-                expect(msgEnv.isSigned()).to.be.true;
+                expect(msgEnv.isSigned).to.be.true;
                 expect(msgEnv.verifySignature()).to.be.true;
             });
 

@@ -240,11 +240,11 @@ describe('Message Receipt instance', function () {
         const msgRcptHex = '55520144e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc0012205974ca7b881b524eaffab90cdc533a43e2c1e3cc9ffbbb8c87f722f03c57744c';
 
         it('should correctly report that message is not checked', function () {
-            expect(msgRcpt.isMessageChecked()).to.be.false;
+            expect(msgRcpt.isMessageChecked).to.be.false;
         });
 
         it('should correctly report that it is not signed yet', function () {
-            expect(msgRcpt.isSigned()).to.be.false;
+            expect(msgRcpt.isSigned).to.be.false;
         });
 
         it('should correctly indicate that signature cannot be verified', function () {
@@ -336,7 +336,7 @@ describe('Message Receipt instance', function () {
 
             it('should work now', function () {
                 expect(msgRcpt.checkMessage(sendMsgEnv)).to.be.true;
-                expect(msgRcpt.isMessageChecked()).to.be.true;
+                expect(msgRcpt.isMessageChecked).to.be.true;
             });
 
             it('should fail if message was already checked', function () {
@@ -366,7 +366,7 @@ describe('Message Receipt instance', function () {
                     msgRcpt.sign(keyPair2);
                 }).not.to.throw();
 
-                expect(msgRcpt.isSigned()).to.be.true;
+                expect(msgRcpt.isSigned).to.be.true;
                 expect(msgRcpt.verifySignature()).to.be.true;
             });
 
@@ -400,11 +400,11 @@ describe('Message Receipt instance', function () {
         const msgRcptHex = '55520144e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc0012205974ca7b881b524eaffab90cdc533a43e2c1e3cc9ffbbb8c87f722f03c57744c';
 
         it('should correctly report that message is checked', function () {
-            expect(msgRcpt.isMessageChecked()).to.be.true;
+            expect(msgRcpt.isMessageChecked).to.be.true;
         });
 
         it('should correctly report that it is not signed yet', function () {
-            expect(msgRcpt.isSigned()).to.be.false;
+            expect(msgRcpt.isSigned).to.be.false;
         });
 
         it('should correctly indicate that signature cannot be verified', function () {

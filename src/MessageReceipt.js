@@ -117,8 +117,12 @@ class MessageReceipt {
         return this.buffer.toString('hex');
     }
 
-    isMessageChecked() {
+    get isMessageChecked() {
         return !!this.msgEnv;
+    }
+
+    get isSigned() {
+        return this.hasSignature;
     }
 
     checkMessage(msgEnv) {
@@ -153,10 +157,6 @@ class MessageReceipt {
         else {
             return false;
         }
-    }
-
-    isSigned() {
-        return this.hasSignature;
     }
 
     sign(keyPair) {
@@ -345,7 +345,7 @@ class MessageReceipt {
 }
 
 function isValidMsgEnvelope(msgEnv) {
-    return msgEnv.msgType === MessageEnvelope.msgType.sendMessage && msgEnv.isMessageWithReadConfirmation();
+    return msgEnv.msgType === MessageEnvelope.msgType.sendMessage && msgEnv.isMessageWithReadConfirmation;
 }
 
 function isValidStructIdByte(byte) {
