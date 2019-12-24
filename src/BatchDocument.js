@@ -30,9 +30,9 @@ class BatchDocument {
         }
 
         this.entries = [];
-        this.msgDataCids = new Set();
-        this.senderPubKeyHashes = new Map();
-        this.receiverPubKeyHashes = new Map();
+        this.setMsgDataCids = new Set();
+        this.mapSenderPubKeyHashes = new Map();
+        this.mapReceiverPubKeyHashes = new Map();
 
         for (let idx = 0, numEntries = entries.length; idx < numEntries; idx++) {
             const result = validateEntry(entries[idx]);
@@ -42,7 +42,7 @@ class BatchDocument {
             if (!result.success) {
                 error = result.error;
             }
-            else if (this.msgDataCids.has(strCid = result.entry.msgDataCid.toString())) {
+            else if (this.setMsgDataCids.has(strCid = result.entry.msgDataCid.toString())) {
                 error = 'duplicate `msgDataCid` property value';
             }
 
@@ -51,22 +51,24 @@ class BatchDocument {
             }
 
             this.entries.push(result.entry);
-            this.msgDataCids.add(strCid);
-            addMapListItem(this.senderPubKeyHashes, result.entry.senderPubKeyHash.toString('base64'), idx);
+            this.setMsgDataCids.add(strCid);
+            addMapListItem(this.mapSenderPubKeyHashes, result.entry.senderPubKeyHash.toString('base64'), idx);
 
             if (result.entry.receiverPubKeyHash) {
-                addMapListItem(this.receiverPubKeyHashes, result.entry.receiverPubKeyHash.toString('base64'), idx);
+                addMapListItem(this.mapReceiverPubKeyHashes, result.entry.receiverPubKeyHash.toString('base64'), idx);
             }
         }
+
+        this.msgDataCids = Array.from(this.setMsgDataCids);
 
         // Instantiate Merkle tree
         this.tree = merkle(this.entries.map(entry => conformLeafCid(entry.msgDataCid)), nodeHash);
 
         // Assemble batch document
         this.doc = {
-            msgData: Array.from(this.msgDataCids),
-            senders: Array.from(this.senderPubKeyHashes),
-            receivers: Array.from(this.receiverPubKeyHashes),
+            msgData: this.msgDataCids,
+            senders: Array.from(this.mapSenderPubKeyHashes),
+            receivers: Array.from(this.mapReceiverPubKeyHashes),
             merkleRoot: this.merkleRoot.toString('base64')
         };
     }
