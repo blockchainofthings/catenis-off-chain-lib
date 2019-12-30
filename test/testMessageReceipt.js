@@ -182,16 +182,6 @@ describe('Create new Message Receipt', function () {
         }).to.throw(Error, 'missing or invalid `msgEnvCid` property');
     });
 
-    it('should throw if an object with an inconsistent value in property `msgEnvCid` is passed', function () {
-        expect(() => {
-            new ctnOffChainLib.MessageReceipt({
-                msgInfo: sendMsgEnv,
-                timestamp: new Date('2019-11-09').getTime(),
-                msgEnvCid: msgCid
-            });
-        }).to.throw(Error, 'inconsistent `msgEnvCid` property: it does not match message envelope');
-    });
-
     it('should return a MessageReceipt object', function () {
         const msgRcpt = new ctnOffChainLib.MessageReceipt({
             msgInfo: sendMsgEnv,
@@ -331,11 +321,6 @@ describe('Message Receipt instance', function () {
             it('should fail if a message envelope with a different receiver public key hash is passed', function () {
                 expect(msgRcpt.checkMessage(sendMsgEnv3)).to.be.false;
                 expect(msgRcpt.checkMessageError).to.equal('Invalid message: it does not match sender and/or receiver');
-            });
-
-            it('should fail if a message envelope for a different message is passed', function () {
-                expect(msgRcpt.checkMessage(sendMsgEnv4)).to.be.false;
-                expect(msgRcpt.checkMessageError).to.equal('Invalid message: it does not match message envelope CID');
             });
 
             it('should work now', function () {

@@ -1,7 +1,6 @@
 const util = require('util');
 const zlib = require('zlib');
 const bitcoinLib = require('bitcoinjs-lib');
-const multihashing = require('multihashing');
 const merkle = require('merkle-lib');
 const merkleProof = require('merkle-lib/proof');
 const MessageEnvelope = require('./MessageEnvelope');
@@ -351,9 +350,6 @@ function validateEntry(entry) {
         if (!validatedEntry.msgDataCid) {
             errors.push('missing or invalid `msgDataCid` property');
         }
-        else if (validatedEntry.msgData && !multihashing.verify(validatedEntry.msgDataCid.multihash, validatedEntry.msgData.buffer)) {
-            errors.push('inconsistent `msgDataCid` property: it does not match message data');
-        }
     }
 
     if (errors.length > 0) {
@@ -396,10 +392,6 @@ function checkMsgDataItem(msgData, entry) {
         error = 'Invalid message data: it does not match sender and/or receiver';
     }
 
-    if (!error && !multihashing.verify(entry.msgDataCid.multihash, msgData.buffer)) {
-        error = 'Invalid message data: it does not match message data CID';
-    }
-    
     return error;
 }
 

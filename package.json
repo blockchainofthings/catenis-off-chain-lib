@@ -23,12 +23,12 @@
     "bitcoinjs-lib": "^5.1.6",
     "cids": "^0.7.1",
     "merkle-lib": "git+ssh://git@github.com/claudiosdc/merkle-lib.git#fix_proof",
-    "multihashing": "^0.3.3",
     "varint": "^5.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
+    "multihashing": "^0.3.3",
     "nyc": "^14.1.1"
   },
   "repository": "git@bitbucket.org:blockchainofthings/catenis-off-chain-lib.git"

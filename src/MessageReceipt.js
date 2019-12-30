@@ -1,6 +1,5 @@
 const bitcoinLib = require('bitcoinjs-lib');
 const varint = require('varint');
-const multihashing = require('multihashing');
 const MessageEnvelope = require('./MessageEnvelope');
 const Util = require('./Util');
 
@@ -80,9 +79,6 @@ class MessageReceipt {
         if (!this.msgEnvCid) {
             rcptInfoErrors.push('missing or invalid `msgEnvCid` property');
         }
-        else if (this.msgEnv && !multihashing.verify(this.msgEnvCid.multihash, this.msgEnv.buffer)) {
-            rcptInfoErrors.push('inconsistent `msgEnvCid` property: it does not match message envelope');
-        }
 
         if (rcptInfoErrors.length > 0) {
             throw new Error('Invalid `rcptInfo` parameter: ' + rcptInfoErrors.join('; '));
@@ -147,10 +143,6 @@ class MessageReceipt {
 
         if (!this.checkMessageError && (!msgEnv.senderPubKeyHash.equals(this.senderPubKeyHash) || !msgEnv.receiverPubKeyHash.equals(this.receiverPubKeyHash))) {
             this.checkMessageError = 'Invalid message: it does not match sender and/or receiver';
-        }
-
-        if (!this.checkMessageError && !multihashing.verify(this.msgEnvCid.multihash, msgEnv.buffer)) {
-            this.checkMessageError = 'Invalid message: it does not match message envelope CID';
         }
 
         if (!this.checkMessageError) {

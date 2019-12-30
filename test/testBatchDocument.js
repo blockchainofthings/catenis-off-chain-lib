@@ -169,15 +169,6 @@ describe('Create new Batch Document', function () {
         }).to.throw(Error, 'missing or invalid `msgDataCid` property');
     });
 
-    it('should throw if an entry with an object with an inconsistent value in property `msgEnvCid` is passed', function () {
-        expect(() => {
-            new ctnOffChainLib.BatchDocument([{
-                msgInfo: sendMsgEnv,
-                msgDataCid: logMsgEnvCid
-            }]);
-        }).to.throw(Error, 'inconsistent `msgDataCid` property: it does not match message data');
-    });
-
     it('should successfully return when passing one entry with a `msgInfo` object', function () {
         expect(() => {
             new ctnOffChainLib.BatchDocument([{
@@ -401,7 +392,7 @@ describe('Batch Document instance', function () {
             const sendMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
                 msgOpts: 0x03,
-                senderPubKeyHash: hashPubKey(keyPair1),
+                senderPubKeyHash: hashPubKey(keyPair3),
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
@@ -427,7 +418,7 @@ describe('Batch Document instance', function () {
             const logMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
                 msgOpts: 0x01,
-                senderPubKeyHash: hashPubKey(keyPair1),
+                senderPubKeyHash: hashPubKey(keyPair3),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
                 msgRef: msgCid2.buffer
@@ -449,7 +440,7 @@ describe('Batch Document instance', function () {
                 expect(result).to.be.false;
                 expect(batchDoc.listCheckMsgDataError).to.deep.equal([
                     'Invalid message data: it does not match sender and/or receiver',
-                    'Invalid message data: it does not match message data CID',
+                    'Invalid message data: it does not match sender and/or receiver',
                     'Invalid message data: not an instance of MessageEnvelope nor MessageReceipt'
                 ]);
             });
@@ -478,7 +469,7 @@ describe('Batch Document instance', function () {
 
                 expect(result).to.be.false;
                 expect(batchDoc.listCheckMsgDataError).to.deep.equal([
-                    'Invalid message data: it does not match message data CID',
+                    'Invalid message data: it does not match sender and/or receiver',
                     'Invalid message data: it does not match sender and/or receiver',
                     'Invalid message data: not an instance of MessageEnvelope nor MessageReceipt'
                 ]);
