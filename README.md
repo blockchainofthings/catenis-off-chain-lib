@@ -6,4 +6,4 @@ A Node.js library used for manipulating Catenis off-chain message data structure
 
 This project is for Blockchain of Things' internal use only.
 
-Copyright © 2019, Blockchain of Things Inc.
+Copyright © 2020, Blockchain of Things Inc.
