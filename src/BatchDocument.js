@@ -374,11 +374,11 @@ function addMapListItem(map, key, item) {
 }
 
 function nodeHash(node) {
-    return Buffer.concat([new Uint8Array([0x1]), bitcoinLib.crypto.hash256(node)]);
+    return Buffer.concat([Buffer.from([0x01]), bitcoinLib.crypto.hash256(node)]);
 }
 
 function conformLeafCid(cid) {
-    return Buffer.concat([new Uint8Array([0x00]), cid.buffer]);
+    return Buffer.concat([Buffer.from([0x00]), cid.buffer]);
 }
 
 function checkMsgDataItem(msgData, entry) {
