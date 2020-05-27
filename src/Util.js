@@ -31,6 +31,10 @@ module.exports = {
         return Number.isInteger(timestamp) && timestamp >= MIN_TIMESTAMP && timestamp <= MAX_TIMESTAMP;
     },
     validateCid(cid) {
+        if (CID.isCID(cid)) {
+            return cid;
+        }
+
         let validCid;
 
         try {
