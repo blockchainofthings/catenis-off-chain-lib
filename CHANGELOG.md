@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.0] - 2020-06-12
+
+### New features
+- Support for a new version (ver. 1) of the Batch Document, which has a different implementation of the Merkle tree.
+
 ## [1.1.0] - 2020-05-26
 
 ### Changes
