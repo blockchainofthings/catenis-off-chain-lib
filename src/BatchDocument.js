@@ -10,13 +10,13 @@ const Util = require('./Util');
 class BatchDocument {
     /**
      * Class constructor
-     * @param entries (Array(Object)) An array of objects containing information describing the message data (either message envelopes or message receipts)
-     *                                 to be included in the batch, with the following properties:
-     *                                 - msgInfo (MessageEnvelope|MessageReceipt|Object) Information about the message the message envelope or receipt of which is to be added to the batch.
-     *                                     Can be either an instance of MessageEnvelope, and instance of MessageReceipt or a literal object with the following properties:
-     *                                     - senderPubKeyHash (String|Buffer) The public key hash of the Catenis device that sent the message
-     *                                     - receiverPubKeyHash (String|Buffer) (optional) The public key hash of the Catenis device to which the message was sent
-     *                                 - msgDataCid (String|Buffer|CID) The IPFS CID of the message envelope or receipt to add to the batch
+     * @param {[Object]} entries An array of objects containing information describing the message data (either message envelopes or message receipts)
+     *                            to be included in the batch, with the following properties:
+     *                            - msgInfo (MessageEnvelope|MessageReceipt|Object) Information about the message the message envelope or receipt of which is to be added to the batch.
+     *                                Can be either an instance of MessageEnvelope, and instance of MessageReceipt or a literal object with the following properties:
+     *                                - senderPubKeyHash (String|Buffer) The public key hash of the Catenis device that sent the message
+     *                                - receiverPubKeyHash (String|Buffer) (optional) The public key hash of the Catenis device to which the message was sent
+     *                            - msgDataCid (String|Buffer|CID) The IPFS CID of the message envelope or receipt to add to the batch
      */
     constructor(entries) {
         if (!Array.isArray(entries)) {

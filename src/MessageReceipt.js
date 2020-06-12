@@ -13,7 +13,7 @@ const minSignDataLength = 1 + 1 + 33;
 class MessageReceipt {
     /**
      * Class constructor
-     * @param rcptInfo (Object) Object containing information describing the message receipt to create, with the
+     * @param {Object} rcptInfo Object containing information describing the message receipt to create, with the
      *                           following properties:
      *                           - msgInfo (MessageEnvelope|Object) Info about the message for which this receipt is issued.
      *                               Can be either an instance of MessageEnvelope or a literal object with the following properties:

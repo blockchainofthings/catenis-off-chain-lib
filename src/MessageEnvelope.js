@@ -12,7 +12,7 @@ const minSignDataLength = 1 + 1 + 33;
 class MessageEnvelope {
     /**
      * Class constructor
-     * @param msgInfo (Object) Object containing information describing the message envelope to create, with the
+     * @param {Object} msgInfo Object containing information describing the message envelope to create, with the
      *                          following properties:
      *                          - msgType (MessageEnvelope.msgType) The message type
      *                          - msgOpts (MessageEnvelope.msgOptions) A bitwise data structure specifying the options for the message
