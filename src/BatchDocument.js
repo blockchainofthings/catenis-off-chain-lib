@@ -7,6 +7,29 @@ const MessageEnvelope = require('./MessageEnvelope');
 const MessageReceipt = require('./MessageReceipt');
 const Util = require('./Util');
 
+const initialVersion = 0;
+const latestVersion = 1;
+const hashFunctions = [
+    // Initial version (ver. 0)
+    {
+        leaf(node) {
+            return Buffer.concat([Buffer.from([0x00]), node]);
+        },
+        internalNode(node) {
+            return Buffer.concat([Buffer.from([0x01]), bitcoinLib.crypto.hash256(node)]);
+        }
+    },
+    // Version 1
+    {
+        leaf(node) {
+            return bitcoinLib.crypto.sha256(Buffer.concat([Buffer.from([0x00]), node]));
+        },
+        internalNode(node) {
+            return bitcoinLib.crypto.sha256(Buffer.concat([Buffer.from([0x01]), node]));
+        }
+    }
+];
+
 class BatchDocument {
     /**
      * Class constructor
@@ -17,8 +40,9 @@ class BatchDocument {
      *                                - senderPubKeyHash (String|Buffer) The public key hash of the Catenis device that sent the message
      *                                - receiverPubKeyHash (String|Buffer) (optional) The public key hash of the Catenis device to which the message was sent
      *                            - msgDataCid (String|Buffer|CID) The IPFS CID of the message envelope or receipt to add to the batch
+     * @param {Number} [version] Version of batch document data structure to use
      */
-    constructor(entries) {
+    constructor(entries, version = latestVersion) {
         if (!Array.isArray(entries)) {
             entries = [entries];
         }
@@ -28,7 +52,12 @@ class BatchDocument {
             throw new Error('Missing or invalid `entries` parameter');
         }
 
+        if (!isValidVersion(version)) {
+            throw new Error('Invalid `version` parameter');
+        }
+
         this.entries = [];
+        this.version = version;
         this.setMsgDataCids = new Set();
         this.mapSenderPubKeyHashes = new Map();
         this.mapReceiverPubKeyHashes = new Map();
@@ -61,15 +90,21 @@ class BatchDocument {
         this.msgDataCids = Array.from(this.setMsgDataCids);
 
         // Instantiate Merkle tree
-        this.tree = merkle(this.entries.map(entry => conformLeafCid(entry.msgDataCid)), nodeHash);
+        this.hashFunction = hashFunctions[this.version];
+        this.tree = merkle(this.entries.map(entry => this.hashFunction.leaf(entry.msgDataCid.buffer)), this.hashFunction.internalNode);
 
         // Assemble batch document
         this.doc = {
+            version: this.version,
             msgData: this.msgDataCids,
             senders: Array.from(this.mapSenderPubKeyHashes),
             receivers: Array.from(this.mapReceiverPubKeyHashes),
             merkleRoot: this.merkleRoot.toString('base64')
         };
+
+        if (version === initialVersion) {
+            delete this.doc.version;
+        }
     }
 
     get merkleRoot() {
@@ -165,10 +200,10 @@ class BatchDocument {
             throw new Error('Invalid message data (envelope or receipt) CID');
         }
 
-        const proof = merkleProof(this.tree, conformLeafCid(msgDataCid));
+        const proof = merkleProof(this.tree, this.hashFunction.leaf(msgDataCid.buffer));
 
         if (proof) {
-            return merkleProof.verify(proof, nodeHash);
+            return merkleProof.verify(proof, this.hashFunction.internalNode);
         }
 
         return false;
@@ -202,8 +237,28 @@ class BatchDocument {
         }
 
         // Check object structure
-        if (!checkObjectProperties(json, {'msgData': 'array', 'senders': 'array', 'receivers': 'array', 'merkleRoot': 'string'})) {
+        if (!checkObjectProperties(json, {
+            'version?': 'number',
+            msgData: 'array',
+            senders: 'array',
+            receivers: 'array',
+            merkleRoot: 'string'
+        })) {
             throw new Error('Invalid batch document object');
+        }
+
+        let version;
+
+        if ('version' in json) {
+            if (!isValidVersion(json.version) || json.version === initialVersion) {
+                throw new Error('Invalid `version` property of batch document object');
+            }
+
+            version = json.version;
+        }
+        else {
+            // No version property present. Set version as initial version
+            version = initialVersion;
         }
 
         if (json.msgData.length === 0) {
@@ -282,7 +337,7 @@ class BatchDocument {
         let batchDoc;
 
         try {
-            batchDoc = new BatchDocument(entries);
+            batchDoc = new BatchDocument(entries, version);
         }
         catch (err) {
             throw new Error('Invalid batch document entries');
@@ -305,6 +360,10 @@ class BatchDocument {
     static fromBase64(base64) {
         return BatchDocument.fromBuffer(Buffer.from(base64, 'base64'));
     }
+}
+
+function isValidVersion(n) {
+    return Number.isInteger(n) && n >= initialVersion && n <= latestVersion;
 }
 
 function validateEntry(entry) {
@@ -373,14 +432,6 @@ function addMapListItem(map, key, item) {
     }
 }
 
-function nodeHash(node) {
-    return Buffer.concat([Buffer.from([0x01]), bitcoinLib.crypto.hash256(node)]);
-}
-
-function conformLeafCid(cid) {
-    return Buffer.concat([Buffer.from([0x00]), cid.buffer]);
-}
-
 function checkMsgDataItem(msgData, entry) {
     let error;
 
@@ -398,9 +449,45 @@ function checkMsgDataItem(msgData, entry) {
 // Argument:
 //  props (Object) A map where key is property name and value the expected property type
 function checkObjectProperties(obj, props) {
-    let keys;
+    let requiredPropsFound = 0;
 
-    return (keys = Object.keys(obj)).length === Object.keys(props).length && keys.every(key => key in props && ((props[key] === 'array' && Array.isArray(obj[key])) || props[key] === typeof obj[key]));
+    let error = Object.keys(obj).some(key => {
+        let prop = key;
+
+        if ((prop in props) || ((prop += '?') in props)) {
+            if (!((props[prop] === 'array' && Array.isArray(obj[key])) || props[prop] === typeof obj[key])) {
+                // Key has an unexpected type.
+                //  Stop iteration indicating failure
+                return true;
+            }
+
+            // Check if it is not an optional property
+            if (!prop.endsWith('?')) {
+                requiredPropsFound++;
+            }
+
+            return false;
+        }
+        else {
+            // Key is not one of the expected props.
+            //  Stop iteration indicating failure
+            return true;
+        }
+    });
+
+    if (!error) {
+        const totalRequiredProps = Object.keys(props).reduce((count, prop) => {
+            if (!prop.endsWith('?')) {
+                count++;
+            }
+
+            return count;
+        }, 0);
+
+        error = requiredPropsFound !== totalRequiredProps;
+    }
+
+    return !error;
 }
 
 module.exports = BatchDocument;
