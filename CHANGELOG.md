@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.2] - 2021-05-13
+
+### Fixes
+- Update dependency modules to mitigate security vulnerabilities.
+
 ## [1.2.1] - 2020-08-01
 
 ### Fixes
