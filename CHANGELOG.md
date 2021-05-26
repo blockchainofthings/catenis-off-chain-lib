@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.3] - 2021-05-26
+
+### Changes
+- Update dependency modules to be in sync with the latest versions of IPFS components.
+
 ## [1.2.2] - 2021-05-13
 
 ### Fixes
