@@ -18,7 +18,7 @@ describe('Create new Batch Document', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const sendMsgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
@@ -27,7 +27,7 @@ describe('Create new Batch Document', function () {
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const logMsgEnvCid = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
     const sendMsgRcpt = new ctnOffChainLib.MessageReceipt({
@@ -254,7 +254,7 @@ describe('Batch Document instance', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const sendMsgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
@@ -263,7 +263,7 @@ describe('Batch Document instance', function () {
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const logMsgEnvCid = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
     const sendMsgRcpt = new ctnOffChainLib.MessageReceipt({
@@ -398,7 +398,7 @@ describe('Batch Document instance', function () {
                     receiverPubKeyHash: hashPubKey(keyPair3),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const sendMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -407,7 +407,7 @@ describe('Batch Document instance', function () {
                     receiverPubKeyHash: hashPubKey(keyPair2),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const sendMsgEnv4 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -416,7 +416,7 @@ describe('Batch Document instance', function () {
                     receiverPubKeyHash: hashPubKey(keyPair4),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const logMsgEnv2 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -424,7 +424,7 @@ describe('Batch Document instance', function () {
                     senderPubKeyHash: hashPubKey(keyPair2),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const logMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -432,7 +432,7 @@ describe('Batch Document instance', function () {
                     senderPubKeyHash: hashPubKey(keyPair3),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
 
                 it('should throw if it is passed less message data items than the number of entries', function () {
@@ -690,7 +690,7 @@ describe('Batch Document instance', function () {
                     receiverPubKeyHash: hashPubKey(keyPair3),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const sendMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -699,7 +699,7 @@ describe('Batch Document instance', function () {
                     receiverPubKeyHash: hashPubKey(keyPair2),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const sendMsgEnv4 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -708,7 +708,7 @@ describe('Batch Document instance', function () {
                     receiverPubKeyHash: hashPubKey(keyPair4),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const logMsgEnv2 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -716,7 +716,7 @@ describe('Batch Document instance', function () {
                     senderPubKeyHash: hashPubKey(keyPair2),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
                 const logMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                     msgType: ctnOffChainLib.MessageEnvelope.msgType.logMessage,
@@ -724,7 +724,7 @@ describe('Batch Document instance', function () {
                     senderPubKeyHash: hashPubKey(keyPair3),
                     timestamp: new Date('2019-11-09').getTime(),
                     stoProviderCode: 0x02,
-                    msgRef: msgCid2.buffer
+                    msgRef: Buffer.from(msgCid2.bytes)
                 });
 
                 it('should throw if it is passed less message data items than the number of entries', function () {
@@ -870,7 +870,7 @@ describe('Parse Batch Document', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const sendMsgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
@@ -879,7 +879,7 @@ describe('Parse Batch Document', function () {
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const logMsgEnvCid = new CID(0, 'dag-pb', multihashing(logMsgEnv.buffer,'sha2-256'));
     const sendMsgRcpt = new ctnOffChainLib.MessageReceipt({

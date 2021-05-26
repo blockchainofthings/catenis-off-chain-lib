@@ -238,7 +238,7 @@ describe('Create new Message Envelope', function () {
             receiverPubKeyHash: Buffer.alloc(20, 0xff),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCid.buffer
+            msgRef: Buffer.from(msgCid.bytes)
         });
 
         expect(msgEnv).to.be.an.instanceof(ctnOffChainLib.MessageEnvelope);
@@ -253,7 +253,7 @@ describe('Create new Message Envelope', function () {
             senderPubKeyHash: Buffer.alloc(20, 0xff),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCid.buffer
+            msgRef: Buffer.from(msgCid.bytes)
         });
 
         expect(msgEnv).to.be.an.instanceof(ctnOffChainLib.MessageEnvelope);
@@ -269,7 +269,7 @@ describe('Create new Message Envelope', function () {
             receiverPubKeyHash: Buffer.alloc(20, 0xff),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCid.buffer
+            msgRef: Buffer.from(msgCid.bytes)
         });
 
         expect(msgEnv).to.be.an.instanceof(ctnOffChainLib.MessageEnvelope);
@@ -290,7 +290,7 @@ describe('Message Envelope instance', function () {
             receiverPubKeyHash: hashPubKey(keyPair2),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCid.buffer
+            msgRef: Buffer.from(msgCid.bytes)
         });
         const msgEnvHex = '584501010344e81b67da0be30136be2bc058232b721265c7fa4f7ec5b3b7840f2539cf6a878a736e13eaf378980000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a';
 
@@ -379,7 +379,7 @@ describe('Message Envelope instance', function () {
             receiverPubKeyHash: hashPubKey(keyPair2),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCid.buffer
+            msgRef: Buffer.from(msgCid.bytes)
         });
         const msgEnvHex = '584501000044e81b67da0be30136be2bc058232b721265c7fa00000000000000000000000000000000000000000000016e4d75dc00021220a4f8be35d524355a7cd5ffbff558bb76f81576dafa7fa5a976aaa3543f29b42a';
 
@@ -459,7 +459,7 @@ describe('Parse Message Envelope', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const msgEnvBuf = msgEnv.buffer;
     const msgRefLength = msgEnvBuf.byteLength - 54;
@@ -471,7 +471,7 @@ describe('Parse Message Envelope', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     signMsgEnv.sign(keyPair1);
     const signMsgEnvBuf = signMsgEnv.buffer;
@@ -584,7 +584,7 @@ describe('Parse Message Envelope', function () {
             senderPubKeyHash: hashPubKey(keyPair1),
             timestamp: new Date('2019-11-09').getTime(),
             stoProviderCode: 0x02,
-            msgRef: msgCid.buffer
+            msgRef: Buffer.from(msgCid.bytes)
         });
 
         it('should return an object that matches original one', function () {

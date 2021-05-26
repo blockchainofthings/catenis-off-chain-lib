@@ -95,7 +95,7 @@ class MessageReceipt {
         offset += this.receiverPubKeyHash.copy(fixedHeader, offset);
         Util.writeInt64BE(this.timestamp, fixedHeader, offset);
 
-        const header = Buffer.concat([fixedHeader, this.msgEnvCid.buffer]);
+        const header = Buffer.concat([fixedHeader, this.msgEnvCid.bytes]);
 
         // Add header length prefix
         let lenPrefixLength = 1;

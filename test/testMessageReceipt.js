@@ -17,7 +17,7 @@ describe('Create new Message Receipt', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const msgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
     const logMsgEnv = new ctnOffChainLib.MessageEnvelope({
@@ -26,7 +26,7 @@ describe('Create new Message Receipt', function () {
         senderPubKeyHash: hashPubKey(keyPair1),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
 
     it('should throw if no parameter is passed', function () {
@@ -214,7 +214,7 @@ describe('Message Receipt instance', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const msgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
 
@@ -256,7 +256,7 @@ describe('Message Receipt instance', function () {
                 senderPubKeyHash: hashPubKey(keyPair1),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCid.buffer
+                msgRef: Buffer.from(msgCid.bytes)
             });
             const noReadConfSendMsgEnv = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -265,7 +265,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCid.buffer
+                msgRef: Buffer.from(msgCid.bytes)
             });
             const keyPair3 = bitcoinLib.ECPair.makeRandom();
             const keyPair4 = bitcoinLib.ECPair.makeRandom();
@@ -276,7 +276,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCid.buffer
+                msgRef: Buffer.from(msgCid.bytes)
             });
             const sendMsgEnv3 = new ctnOffChainLib.MessageEnvelope({
                 msgType: ctnOffChainLib.MessageEnvelope.msgType.sendMessage,
@@ -285,7 +285,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair4),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msgCid.buffer
+                msgRef: Buffer.from(msgCid.bytes)
             });
             const msg2Cid = new CID(0, 'dag-pb', multihashing(Buffer.from('Another test message'),'sha2-256'));
             const sendMsgEnv4 = new ctnOffChainLib.MessageEnvelope({
@@ -295,7 +295,7 @@ describe('Message Receipt instance', function () {
                 receiverPubKeyHash: hashPubKey(keyPair2),
                 timestamp: new Date('2019-11-09').getTime(),
                 stoProviderCode: 0x02,
-                msgRef: msg2Cid.buffer
+                msgRef: Buffer.from(msg2Cid.bytes)
             });
 
             it('should fail if anything other than a message envelope is passed', function () {
@@ -422,7 +422,7 @@ describe('Parse Message Receipt', function () {
         receiverPubKeyHash: hashPubKey(keyPair2),
         timestamp: new Date('2019-11-09').getTime(),
         stoProviderCode: 0x02,
-        msgRef: msgCid.buffer
+        msgRef: Buffer.from(msgCid.bytes)
     });
     const msgEnvCid = new CID(0, 'dag-pb', multihashing(sendMsgEnv.buffer,'sha2-256'));
 
