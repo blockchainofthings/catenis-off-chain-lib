@@ -31,5 +31,5 @@
     "multihashing": "^0.3.3",
     "nyc": "^15.1.0"
   },
-  "repository": "git@bitbucket.org:blockchainofthings/catenis-off-chain-lib.git"
+  "repository": "git@github.com:blockchainofthings/catenis-off-chain-lib.git"
 }
