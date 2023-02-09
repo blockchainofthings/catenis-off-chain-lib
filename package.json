@@ -22,7 +22,7 @@
     "bignumber.js": "^9.0.1",
     "bitcoinjs-lib": "^5.2.0",
     "cids": "^1.1.6",
-    "merkle-lib": "git+ssh://git@github.com/claudiosdc/merkle-lib.git#fix_proof",
+    "merkle-lib": "https://github.com/claudiosdc/merkle-lib.git#fix_proof",
     "varint": "^6.0.0"
   },
   "devDependencies": {
