@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.6] - 2023-03-03
+
+### Changes
+- Update development dependency modules.
+
+### Fix
+- Make code compatible with the browser implementation of Buffer, so that the library may also be used in web browsers.
+- Update dependency modules to mitigate security vulnerabilities
+
 ## [1.2.5] - 2023-02-09
 
 ### Changes
