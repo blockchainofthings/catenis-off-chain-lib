@@ -26,9 +26,9 @@
     "varint": "^6.0.0"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "mocha": "^8.4.0",
-    "multihashing": "^0.3.3",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "multihashing": "^0.3.4",
     "nyc": "^15.1.0"
   },
   "repository": "git@github.com:blockchainofthings/catenis-off-chain-lib.git"
