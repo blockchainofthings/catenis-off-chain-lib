@@ -91,7 +91,7 @@ class BatchDocument {
 
         // Instantiate Merkle tree
         this.hashFunction = hashFunctions[this.version];
-        this.tree = merkle(this.entries.map(entry => this.hashFunction.leaf(entry.msgDataCid.bytes)), this.hashFunction.internalNode);
+        this.tree = merkle(this.entries.map(entry => this.hashFunction.leaf(Buffer.from(entry.msgDataCid.bytes.buffer, entry.msgDataCid.bytes.byteOffset, entry.msgDataCid.bytes.byteLength))), this.hashFunction.internalNode);
 
         // Assemble batch document
         this.doc = {
@@ -200,7 +200,7 @@ class BatchDocument {
             throw new Error('Invalid message data (envelope or receipt) CID');
         }
 
-        const proof = merkleProof(this.tree, this.hashFunction.leaf(msgDataCid.bytes));
+        const proof = merkleProof(this.tree, this.hashFunction.leaf(Buffer.from(msgDataCid.bytes.buffer, msgDataCid.bytes.byteOffset, msgDataCid.bytes.byteLength)));
 
         if (proof) {
             return merkleProof.verify(proof, this.hashFunction.internalNode);
